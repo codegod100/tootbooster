@@ -43,6 +43,7 @@ export async function load({ url, fetch, request, params,cookies }) {
         const access_token = token.access_token
         console.log("setting access token")
         cookies.set("access_token", access_token, {path: "/"})
+        cookies.set("host", host, {path: "/"})
         let resp = await supabase
             .from('users')
             .select()

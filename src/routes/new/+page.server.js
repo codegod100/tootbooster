@@ -28,10 +28,11 @@ export const actions = {
          return {}
       }
       const body = new FormData()
-      
+      let access_token = cookies.get("access_token")
       body.append("status", message)
-      console.log({access_token, host_value})
-      fetch(`https://${host_value}/api/v1/statuses`,{
+      console.log({access_token})
+      let host = cookies.get("host")
+      fetch(`https://${host}/api/v1/statuses`,{
         method: "POST",
         body,
         headers: {
