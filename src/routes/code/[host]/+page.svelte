@@ -1,4 +1,6 @@
 <script>
     export let data
+
 </script>
-{data.code}
+<meta http-equiv = "refresh" content = "1; url = /new" />
+{data.code} {data.user}

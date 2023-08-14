@@ -13,7 +13,7 @@ async function getApp(host) {
         .single()
 }
 
-export async function load({ url, fetch, request, params }) {
+export async function load({ url, fetch, request, params,cookies }) {
     const code = url.searchParams.get('code')
     const host = params.host
     let resp = await getApp(host)
@@ -41,8 +41,8 @@ export async function load({ url, fetch, request, params }) {
     if (account.username) {
         const username = account.username
         const access_token = token.access_token
-
-
+        console.log("setting access token")
+        cookies.set("access_token", access_token, {path: "/"})
         let resp = await supabase
             .from('users')
             .select()
@@ -60,8 +60,10 @@ export async function load({ url, fetch, request, params }) {
                 .insert({ username, access_token, host })
             console.log(resp2)
         }
+        cookies.set("username", `${account.username}@${host}`, {path: "/"})
     }
+    throw redirect(307, "/new")
     return {
-        code
+        code, user: `${account.username}@${host}`
     };
 }

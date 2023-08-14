@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { PROJECT_URL, API_KEY, REDIRECT_URI } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
+
 const supabase = createClient(PROJECT_URL, API_KEY)
 
 async function getApp(host){
@@ -13,7 +14,7 @@ async function getApp(host){
     .single()
 }
 
-export async function load({ fetch, params }) {
+export async function load({ fetch, params,cookies }) {
     const host = params.host
     let resp = await getApp(host)
 
@@ -22,8 +23,9 @@ export async function load({ fetch, params }) {
 
 
     if(resp.data && resp.data.client_id){
+        cookies.set("client_id", resp.data.client_id)
+        cookies.set("client_secret", resp.data.client_secret)
         throw redirect(307,`https://${host}/oauth/authorize?client_id=${resp.data.client_id}&scope=read+write+push&redirect_uri=${REDIRECT_URI}/${host}&response_type=code&host=${host}`)
-        return {item: resp.data}
     }
 
     const body = new FormData()
