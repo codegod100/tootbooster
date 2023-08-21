@@ -32,13 +32,20 @@ export const actions = {
 		body.append("status", message)
 		console.log({ access_token })
 		let host = cookies.get("host")
-		fetch(`https://${host}/api/v1/statuses`, {
+		let resp = await fetch(`https://${host}/api/v1/statuses`, {
 			method: "POST",
 			body,
 			headers: {
 				Authorization: `Bearer ${access_token}`
 			}
 		})
+		let respj = await resp.json()
+		if(respj.error){
+			console.log(respj)
+			return {response: respj.error}
+		} 
+		return {response: "all good"}
+		
 
 	}
 };
