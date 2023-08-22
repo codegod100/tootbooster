@@ -17,5 +17,5 @@ ENV PROJECT_URL=$PROJECT_URL
 ENV API_KEY=$API_KEY
 ENV REDIRECT_URI=$REDIRECT_URI
 
-RUN bunx --bun vite build
+RUN npm run build
 CMD ["bun","/workspace/tootbooster/build/index.js"]

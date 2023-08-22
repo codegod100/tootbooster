@@ -2,9 +2,9 @@ import { createClient } from "@supabase/supabase-js";
 import { PROJECT_URL, API_KEY, REDIRECT_URI } from "$env/static/private";
 import { redirect } from "@sveltejs/kit";
 
-const supabase = createClient(PROJECT_URL, API_KEY);
 
 async function getApp(host) {
+  const supabase = createClient(PROJECT_URL, API_KEY);
   return await supabase
     .from("applications")
     .select()
@@ -15,6 +15,7 @@ async function getApp(host) {
 }
 
 export async function load({ params, cookies }) {
+  const supabase = createClient(PROJECT_URL, API_KEY);
   const host = params.host;
   let resp = await getApp(host);
 
