@@ -1,2 +1,2 @@
 [phases.setup]
-nixPkgs = ["...", "npm"]   # Install the wget package with apt-get
+nixPkgs = ["...", "nodejs_18"]   # Install the wget package with apt-get
