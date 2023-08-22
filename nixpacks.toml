@@ -1,1 +1,2 @@
-providers = ["node","bun"]
+[phases.setup]
+aptPkgs = ["...", "npm"]   # Install the wget package with apt-get
