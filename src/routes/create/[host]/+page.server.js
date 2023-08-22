@@ -14,7 +14,7 @@ async function getApp(host) {
     .single();
 }
 
-export async function load({ fetch, params, cookies }) {
+export async function load({ params, cookies }) {
   const host = params.host;
   let resp = await getApp(host);
 

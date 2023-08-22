@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-export async function load({ fetch, params, url, cookies }) {
+export async function load({ params, url, cookies }) {
 	let sm = url.searchParams.get('message')
 
 	if (sm) {
