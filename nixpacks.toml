@@ -1,2 +1,2 @@
 [phases.setup]
-aptPkgs = ["...", "npm"]   # Install the wget package with apt-get
+nixPkgs = ["...", "npm"]   # Install the wget package with apt-get
