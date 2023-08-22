@@ -18,4 +18,4 @@ ENV API_KEY=$API_KEY
 ENV REDIRECT_URI=$REDIRECT_URI
 
 RUN bunx --bun vite build
-CMD ["bun","./build/index.js"]
+CMD ["bun","/workspace/tootbooster/build/index.js"]
