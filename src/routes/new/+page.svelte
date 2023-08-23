@@ -15,9 +15,12 @@
   </form>
   {form?.response || ""}
 {:else}
-  <form method="GET">
+  <form id="login" method="GET">
     <div>Enter mastodon/fediverse domain to log into</div>
     <input type="text" name="host" />
-    <input type="submit" value="login" />
+    <input type="submit" value="login" on:click={(e) => {
+      e.currentTarget.disabled = true;
+      document.getElementById("login").submit()
+    }} />
   </form>
 {/if}
