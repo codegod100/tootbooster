@@ -1,5 +1,5 @@
 #!/bin/bash
 npm run build
-chown -R person:person /home/person
-sudo -u person ./build.sh
+~/.local/bin/edgedb project init --non-interactive
 npx bun build/index.js
+

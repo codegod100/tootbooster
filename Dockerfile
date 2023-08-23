@@ -13,7 +13,6 @@ RUN npm install
 COPY . .
 
 ENV PORT=5173
-USER root
 
 
 
