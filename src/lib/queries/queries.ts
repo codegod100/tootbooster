@@ -2,6 +2,26 @@
 
 import type {Executor} from "edgedb";
 
+export type GetApplicationArgs = {
+  "host": string;
+};
+
+export type GetApplicationReturns = {
+  "id": string;
+  "client_id": string;
+  "client_secret": string;
+  "host": string;
+} | null;
+
+export async function getApplication(client: Executor, args: GetApplicationArgs): Promise<GetApplicationReturns> {
+  return client.querySingle(`\
+select Application{*}
+filter .host = <str>$host
+limit 1`, args);
+
+}
+
+
 export type GetUserArgs = {
   "username": string;
   "host": string;
@@ -40,26 +60,6 @@ insert User {
     access_token := <str>$access_token,
     host := <str>$host
 }`, args);
-
-}
-
-
-export type GetApplicationArgs = {
-  "host": string;
-};
-
-export type GetApplicationReturns = {
-  "id": string;
-  "client_id": string;
-  "client_secret": string;
-  "host": string;
-} | null;
-
-export async function getApplication(client: Executor, args: GetApplicationArgs): Promise<GetApplicationReturns> {
-  return client.querySingle(`\
-select Application{*}
-filter .host = <str>$host
-limit 1`, args);
 
 }
 
