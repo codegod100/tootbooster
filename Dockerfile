@@ -1,7 +1,6 @@
-FROM "debian"
+FROM ghcr.io/codegod100/bun:master
+
 WORKDIR "/workspace/tootbooster"
-RUN apt update && apt install -y npm
-RUN npm install -g bun
 COPY package.json package.json
 COPY bun.lockb bun.lockb
 RUN bun install
