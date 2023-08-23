@@ -1,4 +1,6 @@
 FROM ghcr.io/codegod100/bun:master
+RUN apt install -y curl
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh -s -- -y
 
 WORKDIR "/workspace/tootbooster"
 COPY package.json package.json
@@ -6,14 +8,9 @@ COPY bun.lockb bun.lockb
 RUN bun install
 COPY . .
 
-ARG PORT=5173
-ARG PROJECT_URL
-ARG API_KEY
-ARG REDIRECT_URI
+ENV PORT=5173
+ENV DBBHOST=wacky-guitar.railway.internal
 
-ENV PORT=$PORT
-ENV PROJECT_URL=$PROJECT_URL
-ENV API_KEY=$API_KEY
-ENV REDIRECT_URI=$REDIRECT_URI
+
 
 CMD ["./run.sh"]
