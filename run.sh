@@ -1,4 +1,4 @@
 #!/bin/bash
-~/.local/bin/edgedb instance create toot
+~/.local/bin/edgedb project init --non-interactive
 npm run build
 npx bun build/index.js
