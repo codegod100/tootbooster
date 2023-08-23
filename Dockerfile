@@ -9,7 +9,7 @@ RUN bun install
 COPY . .
 
 ENV PORT=5173
-ENV DBHOST=wacky-guitar.railway.internal
+ENV DBHOST=wacky-guitar
 
 
 
