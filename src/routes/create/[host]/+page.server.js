@@ -1,32 +1,20 @@
-import { createClient } from "@supabase/supabase-js";
 import { PROJECT_URL, API_KEY, REDIRECT_URI } from "$env/static/private";
 import { redirect } from "@sveltejs/kit";
-
-
-async function getApp(host) {
-  const supabase = createClient(PROJECT_URL, API_KEY);
-  return await supabase
-    .from("applications")
-    .select()
-    .order("created_at", { ascending: false })
-    .eq("host", host)
-    .limit(1)
-    .single();
-}
+import { getApplication,insertApplication } from "$lib/queries/queries"
+import {createClient} from "edgedb"
 
 export async function load({ params, cookies }) {
-  const supabase = createClient(PROJECT_URL, API_KEY);
+  const client = createClient();
   const host = params.host;
-  let resp = await getApp(host);
+  let app = await getApplication(client, {host})
+  console.log(app)
 
-  console.log(resp.data);
-
-  if (resp.data && resp.data.client_id) {
-    cookies.set("client_id", resp.data.client_id);
-    cookies.set("client_secret", resp.data.client_secret);
+  if (app) {
+    cookies.set("client_id", app.client_id);
+    cookies.set("client_secret", app.client_secret);
     throw redirect(
       307,
-      `https://${host}/oauth/authorize?client_id=${resp.data.client_id}&scope=read+write+push&redirect_uri=${REDIRECT_URI}/${host}&response_type=code&host=${host}`
+      `https://${host}/oauth/authorize?client_id=${app.client_id}&scope=read+write+push&redirect_uri=${REDIRECT_URI}/${host}&response_type=code&host=${host}`
     );
   }
 
@@ -40,19 +28,11 @@ export async function load({ params, cookies }) {
     method: "POST",
     body,
   });
-  console.log("trying");
-  console.log({ res });
   const item = await res.json();
-  console.log("wat");
   console.log({ item });
-  let resp2 = await supabase
-    .from("applications")
-    .insert({
-      client_id: item.client_id,
-      client_secret: item.client_secret,
-      host,
-    });
-  console.log(resp2.error, resp2.statusText);
+
+  app = await insertApplication(client, {host,client_id: item.client_id, client_secret: item.client_secret})
+  console.log({app})
   throw redirect(
     307,
     `https://${host}/oauth/authorize?client_id=${item.client_id}&scope=read+write+push&redirect_uri=${REDIRECT_URI}/${host}&response_type=code&host=${host}`

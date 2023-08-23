@@ -1,26 +1,17 @@
-import { createClient } from '@supabase/supabase-js'
 import { PROJECT_URL, API_KEY, REDIRECT_URI } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
+import {createClient} from "edgedb"
+import { getApplication,getUser,insertUser } from "$lib/queries/queries"
 
-async function getApp(host) {
-    const supabase = createClient(PROJECT_URL, API_KEY)
-    return await supabase
-        .from('applications')
-        .select()
-        .order("created_at", { ascending: false })
-        .eq("host", host)
-        .limit(1)
-        .single()
-}
 
 export async function load({ url,  request, params,cookies }) {
-    const supabase = createClient(PROJECT_URL, API_KEY)
+    const client = createClient();
     const code = url.searchParams.get('code')
     const host = params.host
-    let resp = await getApp(host)
+    let app = await getApplication(client, {host})
     const body = new FormData()
-    body.append("client_id", resp.data.client_id)
-    body.append("client_secret", resp.data.client_secret)
+    body.append("client_id", app.client_id)
+    body.append("client_secret", app.client_secret)
     body.append("redirect_uri", `${REDIRECT_URI}/${host}`)
     body.append("grant_type", "authorization_code")
     body.append("code", code)
@@ -41,26 +32,14 @@ export async function load({ url,  request, params,cookies }) {
         const access_token = token.access_token
         cookies.set("access_token", access_token, {path: "/"})
         cookies.set("host", host, {path: "/"})
-        let resp = await supabase
-            .from('users')
-            .select()
-            .order("created_at", { ascending: false })
-            .eq("username", username)
-            .eq("host", host)
-            .limit(1)
-            .single()
+        let user = await getUser(client, {username, host})
+        console.log({user})
 
-        console.log({resp})
+        if (!user) {
 
-        if (!resp.data) {
-
-            let resp2 = await supabase
-                .from('users')
-                .insert({ username, access_token, host })
+            await insertUser(client, {username,access_token,host})
         }
         cookies.set("username", `${account.username}@${host}`, {path: "/"})
-        // let loc = await locate(cookies.set)
-        // console.log({loc})
         console.log(cookies.get("username"))
     }
     throw redirect(307, "/new")
