@@ -2,6 +2,48 @@
 
 import type {Executor} from "edgedb";
 
+export type GetUserArgs = {
+  "username": string;
+  "host": string;
+};
+
+export type GetUserReturns = {
+  "id": string;
+  "access_token": string;
+  "host": string;
+  "username": string;
+} | null;
+
+export async function getUser(client: Executor, args: GetUserArgs): Promise<GetUserReturns> {
+  return client.querySingle(`\
+select User{*}
+filter .username = <str>$username AND .host = <str>$host
+limit 1`, args);
+
+}
+
+
+export type InsertUserArgs = {
+  "username": string;
+  "access_token": string;
+  "host": string;
+};
+
+export type InsertUserReturns = {
+  "id": string;
+};
+
+export async function insertUser(client: Executor, args: InsertUserArgs): Promise<InsertUserReturns> {
+  return client.queryRequiredSingle(`\
+insert User {
+    username := <str>$username,
+    access_token := <str>$access_token,
+    host := <str>$host
+}`, args);
+
+}
+
+
 export type GetApplicationArgs = {
   "host": string;
 };
@@ -39,46 +81,5 @@ insert Application{
     client_secret := <str>$client_secret,
     host := <str>$host
 }`, args);
-
-}
-
-
-export type InsertUserArgs = {
-  "username": string;
-  "access_token": string;
-  "host": string;
-};
-
-export type InsertUserReturns = {
-  "id": string;
-};
-
-export async function insertUser(client: Executor, args: InsertUserArgs): Promise<InsertUserReturns> {
-  return client.queryRequiredSingle(`\
-insert User {
-    username := <str>$username,
-    access_token := <str>$access_token,
-    host := <str>$host
-}`, args);
-
-}
-
-
-export type GetUserArgs = {
-  "username": string;
-  "host": string;
-};
-
-export type GetUserReturns = {
-  "id": string;
-  "access_token": string;
-  "host": string;
-  "username": string;
-}[];
-
-export async function getUser(client: Executor, args: GetUserArgs): Promise<GetUserReturns> {
-  return client.query(`\
-select User{*}
-filter .username = <str>$username AND .host = <str>$host`, args);
 
 }
