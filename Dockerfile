@@ -1,5 +1,5 @@
 FROM ghcr.io/codegod100/bun:master
-RUN useradd -ms /bin/bash  person
+RUN groupadd -r person && useradd -r -g person person
 USER person
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh -s -- -y
 
