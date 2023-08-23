@@ -1,6 +1,8 @@
-FROM ghcr.io/codegod100/bun:master
-RUN apt install -y curl
+FROM debian
+RUN apt update && apt install -y npm curl
+RUN npm install -g bun
 RUN useradd -ms /bin/bash person
+RUN chown -R /home/person/.local person
 USER person
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh -s -- -y
 WORKDIR "/home/person/tootbooster"
@@ -11,7 +13,6 @@ RUN npm install
 COPY . .
 
 ENV PORT=5173
-ENV DBHOST=wacky-guitar
 
 
 
