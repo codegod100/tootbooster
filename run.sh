@@ -1,4 +1,4 @@
 #!/bin/bash
-npm run build
-npx bun build/index.js
+bun run build
+bun build/index.js
 
