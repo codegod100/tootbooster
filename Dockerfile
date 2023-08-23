@@ -1,5 +1,5 @@
 FROM ghcr.io/codegod100/bun:master
-RUN apt install -y curl
+RUN apt install -y curl ping
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh -s -- -y
 
 WORKDIR "/workspace/tootbooster"
