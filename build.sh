@@ -1,0 +1,1 @@
+~/.local/bin/edgedb project init --non-interactive

@@ -1,5 +1,5 @@
 FROM debian
-RUN apt update && apt install -y npm curl
+RUN apt update && apt install -y npm curl sudo
 RUN useradd -ms /bin/bash person
 
 USER person
