@@ -1,7 +1,7 @@
 FROM debian
 RUN apt update && apt install -y npm curl
 RUN useradd -ms /bin/bash person
-RUN mkdir -p /home/person/.local
+RUN mkdir -p /home/person/.local/share/edgedb/data
 RUN chown -R person /home/person/.local
 USER person
 # RUN npm install -g bun
