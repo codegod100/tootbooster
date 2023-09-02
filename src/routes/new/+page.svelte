@@ -2,25 +2,47 @@
   export let data;
   export let form;
   import { browser } from "$app/environment";
+  import { Input, Button, Spinner, Label, Textarea } from "flowbite-svelte";
+  let loading = false;
 </script>
 
 {#if data.user}
   <div>{data.user}</div>
-  <form method="POST">
-    <textarea name="message">{data.message}</textarea>
+  <form id="submit" method="POST">
+    <Textarea name="message" class="md:w-1/2">{data.message}</Textarea>
     <div>
-      <input type="submit" value="send message" />
-      <input type="submit" name="logout" value="logout" />
+      <!-- <input type="submit" value="send message" /> -->
+      <Button type="submit" size="sm">send message</Button>
+      <Button type="submit" size="sm" name="logout" value="logout"
+        >logout</Button
+      >
     </div>
   </form>
   {form?.response || ""}
 {:else}
   <form id="login" method="GET">
-    <div>Enter mastodon/fediverse domain to log into</div>
-    <input type="text" name="host" />
-    <input type="submit" value="login" on:click={(e) => {
-      e.currentTarget.disabled = true;
-      document.getElementById("login").submit()
-    }} />
+    <Label for="host">Enter mastodon/fediverse domain to log into</Label>
+    <div class="grid gap-6 md:grid-cols-2">
+      <div>
+        <Input type="text" name="host" id="host" size="sm" />
+      </div>
+      <div>
+        <Button
+          size="sm"
+          type="submit"
+          disabled={loading}
+          on:click={(e) => {
+            loading = true;
+            e.currentTarget.form.submit();
+          }}
+        >
+          {#if loading}
+            <Spinner class="mr-3" size="4" />loading...
+          {:else}
+            login
+          {/if}
+        </Button>
+      </div>
+    </div>
   </form>
 {/if}

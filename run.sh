@@ -1,4 +1,5 @@
 #!/bin/bash
-bun run build
-bun build/index.js
+echo $EDGEDB_DSN
+npm run build
+node build/index.js
 

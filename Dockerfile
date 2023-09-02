@@ -1,10 +1,10 @@
-FROM node
-
+FROM alpine
+RUN apk update && apk add bash nodejs npm
+RUN npm install -g pnpm
 WORKDIR "/workspace/tootbooster"
-RUN npm install -g bun
 COPY package.json package.json
-COPY bun.lockb bun.lockb
-RUN bun install
+COPY pnpm-lock.yaml pnpm-lock.yaml
+RUN pnpm install
 COPY . .
 
 ENV PORT=5173
